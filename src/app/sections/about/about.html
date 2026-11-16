@@ -1,0 +1,22 @@
+<section class="section" id="sobre" aria-labelledby="sobre-titulo">
+  <div class="container stack">
+    <app-section-title headingId="sobre-titulo">Sobre mim</app-section-title>
+
+    <div class="grid">
+      <figure class="room">
+        <app-pixel-room (action)="onRoomAction($event)" />
+        <figcaption class="hint">
+          Clique em <b>mim</b>, na <b>cafeteira</b> ou no <b>polvo</b> da cama.
+        </figcaption>
+        <p class="reaction" aria-live="polite">{{ reaction() }}</p>
+      </figure>
+
+      <div class="text">
+        @for (paragraph of profile().about; track $index) {
+          <p>{{ paragraph }}</p>
+        }
+        <p class="education"><span>Formação</span> · {{ profile().education }}</p>
+      </div>
+    </div>
+  </div>
+</section>

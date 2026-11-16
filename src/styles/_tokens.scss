@@ -1,0 +1,38 @@
+// Design tokens from the Figma v2 file (page "✨ v2 — Desktop (2026)").
+:root {
+  color-scheme: dark;
+
+  // Color
+  --color-bg: #04041b;
+  --color-bg-alt: #0b0c1c;
+  --color-field: #24202c;
+  --color-line: #0e236d;
+  --color-text: #ffffff;
+  --color-muted: #bbbbbb;
+  --color-accent: #0d83fa;
+  --color-accent-strong: #128cfc;
+  --color-danger: #ff6b7a;
+  --hero-gradient: linear-gradient(180deg, #1f012c 0%, #020012 8%, #000010 100%);
+
+  // Type (Raleway, as in the original template)
+  --font-sans: 'Raleway', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --text-xs: 0.8125rem; // 13
+  --text-sm: 0.875rem; // 14
+  --text-md: 1rem; // 16
+  --text-lg: 1.125rem; // 18
+  --text-xl: 1.3125rem; // 21
+  --text-2xl: 1.5rem; // 24
+  --text-3xl: clamp(1.625rem, 3vw, 1.875rem); // 26-30
+  --text-hero: clamp(2rem, 5vw, 3rem); // 32-48
+
+  // Space & layout
+  --container: 1110px;
+  --gutter: max(20px, env(safe-area-inset-left, 0px));
+  --section-y: clamp(72px, 9vw, 110px);
+  --radius: 4px;
+  --header-h: 72px;
+
+  // Motion
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --duration: 180ms;
+}

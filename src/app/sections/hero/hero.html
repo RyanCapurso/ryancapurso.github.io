@@ -1,0 +1,24 @@
+<section class="hero" id="inicio" aria-labelledby="hero-title">
+  <div class="container inner">
+    <img
+      class="photo"
+      [ngSrc]="profile().photo"
+      width="132"
+      height="132"
+      priority
+      [alt]="'Foto de ' + profile().name"
+    />
+    <p class="kicker">{{ profile().kicker }}</p>
+    <h1 class="title" id="hero-title">
+      <span class="light">Olá, eu sou</span> {{ profile().name }}.<br />
+      {{ roleParts().before }}<span class="accent">Java</span>{{ roleParts().after }}.
+    </h1>
+    <p class="summary">{{ profile().summary }}</p>
+    <div class="cta">
+      <a class="btn btn--outline" href="#experiencia"
+        >Veja minha experiência <span aria-hidden="true">→</span></a
+      >
+      <a class="btn btn--primary" href="#contato">Fale comigo</a>
+    </div>
+  </div>
+</section>

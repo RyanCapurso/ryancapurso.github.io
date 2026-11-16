@@ -1,0 +1,38 @@
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="header">
+  <div class="container bar">
+    <a class="logo" href="#inicio" aria-label="Ryan Capurso, voltar ao início">RC<span>.</span></a>
+
+    <nav class="nav" aria-label="Seções" id="menu-principal" [class.nav--open]="menuOpen()">
+      <ul role="list" class="links">
+        @for (item of store.navItems(); track item.id) {
+          <li>
+            <a
+              class="link"
+              [href]="'#' + item.id"
+              [class.link--active]="spy.activeId() === item.id"
+              [attr.aria-current]="spy.activeId() === item.id ? 'location' : null"
+              (click)="closeMenu()"
+              >{{ item.label }}</a
+            >
+          </li>
+        }
+      </ul>
+    </nav>
+
+    <div class="actions">
+      <app-social-links class="social" [links]="store.socialLinks()" />
+      <button
+        type="button"
+        class="menu-btn"
+        aria-controls="menu-principal"
+        [attr.aria-expanded]="menuOpen()"
+        (click)="toggleMenu()"
+      >
+        <span class="visually-hidden">{{ menuOpen() ? 'Fechar menu' : 'Abrir menu' }}</span>
+        <span class="burger" [class.burger--open]="menuOpen()" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+</header>

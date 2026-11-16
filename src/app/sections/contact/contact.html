@@ -1,0 +1,70 @@
+<section class="section section--alt" id="contato" aria-labelledby="contato-titulo">
+  <div class="container wrap">
+    <app-section-title headingId="contato-titulo">Contato</app-section-title>
+    <p class="intro">Possui alguma dúvida ou quer trabalhar em conjunto? Me envie uma mensagem!</p>
+
+    <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+      <div class="field">
+        <label for="contato-nome">Nome</label>
+        <input
+          id="contato-nome"
+          type="text"
+          formControlName="name"
+          autocomplete="name"
+          [attr.aria-invalid]="showError('name')"
+          [attr.aria-describedby]="showError('name') ? 'contato-nome-erro' : null"
+        />
+        @if (showError('name')) {
+          <p class="error" id="contato-nome-erro">Informe seu nome (pelo menos 2 letras).</p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="contato-email">E-mail</label>
+        <input
+          id="contato-email"
+          type="email"
+          formControlName="email"
+          autocomplete="email"
+          inputmode="email"
+          [attr.aria-invalid]="showError('email')"
+          [attr.aria-describedby]="showError('email') ? 'contato-email-erro' : null"
+        />
+        @if (showError('email')) {
+          <p class="error" id="contato-email-erro">
+            Informe um e-mail válido, como nome&#64;empresa.com.
+          </p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="contato-mensagem">Mensagem</label>
+        <textarea
+          id="contato-mensagem"
+          rows="6"
+          formControlName="message"
+          [attr.aria-invalid]="showError('message')"
+          [attr.aria-describedby]="showError('message') ? 'contato-mensagem-erro' : null"
+        ></textarea>
+        @if (showError('message')) {
+          <p class="error" id="contato-mensagem-erro">
+            Escreva uma mensagem com pelo menos 10 caracteres.
+          </p>
+        }
+      </div>
+
+      <button type="submit" class="btn btn--primary submit">Enviar mensagem</button>
+
+      <p class="status" aria-live="polite">
+        @if (sent()) {
+          Abrimos seu app de e-mail com a mensagem pronta. É só enviar por lá.
+        }
+      </p>
+    </form>
+
+    <p class="direct">
+      Ou escreva direto para <a [href]="'mailto:' + profile().email">{{ profile().email }}</a> ·
+      {{ profile().location }}
+    </p>
+  </div>
+</section>
