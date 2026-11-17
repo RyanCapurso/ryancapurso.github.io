@@ -49,6 +49,7 @@ export class MeteorField {
       engine = new MeteorFieldEngine(this.canvasRef().nativeElement, {
         colors: ['#0d83fa', '#128cfc', '#5cc8ff', '#7b5cff', '#ffffff'],
         streakRgb: '160, 190, 255',
+        glowRgb: '110, 200, 255',
       });
     } catch {
       return; // No canvas: the hero gradient alone is fine.
@@ -61,8 +62,24 @@ export class MeteorField {
     };
     fit();
 
+    // Highlight streaks near the mouse. The canvas ignores pointer events so the hero
+    // stays clickable; listen on the section that contains it instead.
+    const area = this.host.nativeElement.parentElement;
+    const onMove = (event: PointerEvent) => {
+      if (event.pointerType === 'touch') return;
+      const rect = this.host.nativeElement.getBoundingClientRect();
+      engine.setPointer(event.clientX - rect.left, event.clientY - rect.top);
+    };
+    const onLeave = () => engine.setPointer(null);
+    area?.addEventListener('pointermove', onMove, { passive: true });
+    area?.addEventListener('pointerleave', onLeave);
+    this.destroyRef.onDestroy(() => {
+      area?.removeEventListener('pointermove', onMove);
+      area?.removeEventListener('pointerleave', onLeave);
+    });
+
     const reduceMotion = view.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
-    if (reduceMotion) return; // keep the single still frame drawn by resize()
+    if (reduceMotion) return; // keep the still frame; the pointer highlight still redraws it
 
     const resize = 'ResizeObserver' in view ? new ResizeObserver(fit) : undefined;
     resize?.observe(this.host.nativeElement);

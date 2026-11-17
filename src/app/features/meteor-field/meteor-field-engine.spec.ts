@@ -22,7 +22,7 @@ function seeded(seed = 42): () => number {
 }
 
 describe('MeteorFieldEngine', () => {
-  const options = { colors: ['#0d83fa'], streakRgb: '255, 255, 255' };
+  const options = { colors: ['#0d83fa'], streakRgb: '255, 255, 255', glowRgb: '0, 200, 255' };
 
   it('scales the number of streaks and dots with the area, with a cap', () => {
     const engine = new MeteorFieldEngine(fakeCanvas(), options, seeded());
@@ -49,5 +49,36 @@ describe('MeteorFieldEngine', () => {
     new MeteorFieldEngine(canvas, options, seeded()).resize(100, 50, 3);
     expect(canvas.width).toBe(200);
     expect(canvas.height).toBe(100);
+  });
+});
+
+describe('MeteorFieldEngine pointer highlight', () => {
+  const options = { colors: ['#0d83fa'], streakRgb: '255, 255, 255', glowRgb: '0, 200, 255' };
+  const glows = (engine: MeteorFieldEngine) =>
+    (engine as unknown as { streaks: { glow: number }[] }).streaks.map((s) => s.glow);
+
+  it('lights up streaks near the pointer and fades them after it leaves', () => {
+    const engine = new MeteorFieldEngine(fakeCanvas(), options, seeded(7));
+    engine.resize(1440, 700, 1);
+    engine.setPointer(720, 350); // not running: applied at once
+    const lit = glows(engine).filter((g) => g > 0.3).length;
+    expect(lit).toBeGreaterThan(0);
+    expect(lit).toBeLessThan(glows(engine).length);
+
+    engine.setPointer(null);
+    expect(Math.max(...glows(engine))).toBe(0);
+  });
+
+  it('eases the highlight in over time while animating', () => {
+    const engine = new MeteorFieldEngine(fakeCanvas(), options, seeded(7));
+    engine.resize(1440, 700, 1);
+    (engine as unknown as { running: boolean }).running = true;
+    engine.setPointer(720, 350);
+    expect(Math.max(...glows(engine))).toBe(0);
+    engine.step(16);
+    const early = Math.max(...glows(engine));
+    for (let i = 0; i < 20; i++) engine.step(16);
+    expect(early).toBeGreaterThan(0);
+    expect(Math.max(...glows(engine))).toBeGreaterThan(early);
   });
 });

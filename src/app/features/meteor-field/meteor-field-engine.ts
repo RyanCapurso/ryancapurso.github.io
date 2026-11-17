@@ -9,6 +9,8 @@ interface Streak {
   length: number;
   speed: number; // px per ms
   alpha: number;
+  /** 0..1, eased highlight while the pointer is near. */
+  glow: number;
 }
 
 interface Dot {
@@ -18,6 +20,7 @@ interface Dot {
   speed: number;
   color: string;
   phase: number;
+  glow: number;
 }
 
 export interface MeteorFieldOptions {
@@ -25,11 +28,18 @@ export interface MeteorFieldOptions {
   colors: readonly string[];
   /** Color of the streaks (rgb triplet, alpha is applied per streak). */
   streakRgb: string;
+  /** Color of streaks highlighted by the pointer. */
+  glowRgb: string;
 }
 
 // Falling direction: down and slightly to the left, normalized.
 const DIR_X = -0.34;
 const DIR_Y = 0.94;
+
+/** Pointer influence radius in CSS px. */
+const GLOW_RADIUS = 170;
+/** Time constant (ms) for the highlight to fade in/out. */
+const GLOW_EASE_MS = 140;
 
 export class MeteorFieldEngine {
   private readonly ctx: CanvasRenderingContext2D;
@@ -41,6 +51,7 @@ export class MeteorFieldEngine {
   private last = 0;
   private running = false;
   private time = 0;
+  private pointer: { x: number; y: number } | null = null;
 
   constructor(
     private readonly canvas: HTMLCanvasElement,
@@ -69,6 +80,17 @@ export class MeteorFieldEngine {
     this.draw();
   }
 
+  /** Pointer position in canvas CSS px, or null when it leaves. */
+  setPointer(x: number | null, y?: number): void {
+    this.pointer = x === null || y === undefined ? null : { x, y };
+    if (!this.running) {
+      // Static mode (reduced motion): apply the highlight at once and redraw.
+      for (const s of this.streaks) s.glow = this.streakTarget(s);
+      for (const d of this.dots) d.glow = this.pointTarget(d.x, d.y);
+      this.draw();
+    }
+  }
+
   start(): void {
     if (this.running) return;
     this.running = true;
@@ -92,13 +114,16 @@ export class MeteorFieldEngine {
   /** Advance the simulation by `dt` ms. */
   step(dt: number): void {
     this.time += dt;
+    const ease = Math.min(1, dt / GLOW_EASE_MS);
     for (let i = 0; i < this.streaks.length; i++) {
       const s = this.streaks[i];
       s.x += DIR_X * s.speed * dt;
       s.y += DIR_Y * s.speed * dt;
       if (s.y - s.length * DIR_Y > this.height || s.x + s.length * -DIR_X < 0) {
         this.streaks[i] = this.newStreak(false);
+        continue;
       }
+      s.glow += (this.streakTarget(s) - s.glow) * ease;
     }
     for (let i = 0; i < this.dots.length; i++) {
       const d = this.dots[i];
@@ -106,7 +131,9 @@ export class MeteorFieldEngine {
       d.y += DIR_Y * d.speed * dt;
       if (d.y > this.height + 4 || d.x < -4) {
         this.dots[i] = { ...this.newDot(), y: -4 };
+        continue;
       }
+      d.glow += (this.pointTarget(d.x, d.y) - d.glow) * ease;
     }
   }
 
@@ -114,14 +141,16 @@ export class MeteorFieldEngine {
     const { ctx } = this;
     ctx.clearRect(0, 0, this.width, this.height);
 
-    ctx.lineWidth = 1;
     ctx.lineCap = 'round';
     for (const s of this.streaks) {
       const tailX = s.x - DIR_X * s.length;
       const tailY = s.y - DIR_Y * s.length;
+      const alpha = s.alpha + s.glow * (0.85 - s.alpha);
+      const rgb = s.glow > 0.02 ? this.options.glowRgb : this.options.streakRgb;
       const gradient = ctx.createLinearGradient(s.x, s.y, tailX, tailY);
-      gradient.addColorStop(0, `rgba(${this.options.streakRgb}, ${s.alpha})`);
-      gradient.addColorStop(1, `rgba(${this.options.streakRgb}, 0)`);
+      gradient.addColorStop(0, `rgba(${rgb}, ${alpha})`);
+      gradient.addColorStop(1, `rgba(${rgb}, 0)`);
+      ctx.lineWidth = 1 + s.glow * 0.8;
       ctx.strokeStyle = gradient;
       ctx.beginPath();
       ctx.moveTo(s.x, s.y);
@@ -131,15 +160,36 @@ export class MeteorFieldEngine {
 
     for (const d of this.dots) {
       const twinkle = 0.55 + 0.45 * Math.sin(this.time / 600 + d.phase);
-      ctx.globalAlpha = twinkle;
+      ctx.globalAlpha = Math.min(1, twinkle + d.glow);
       ctx.fillStyle = d.color;
-      ctx.fillRect(d.x, d.y, d.size, d.size);
+      const size = d.size + d.glow * 1.5;
+      ctx.fillRect(d.x - (size - d.size) / 2, d.y - (size - d.size) / 2, size, size);
     }
     ctx.globalAlpha = 1;
   }
 
   get counts(): { streaks: number; dots: number } {
     return { streaks: this.streaks.length, dots: this.dots.length };
+  }
+
+  /** 0..1 highlight for a streak, from the pointer's distance to its segment. */
+  private streakTarget(s: Streak): number {
+    const p = this.pointer;
+    if (!p) return 0;
+    const tailX = s.x - DIR_X * s.length;
+    const tailY = s.y - DIR_Y * s.length;
+    const vx = s.x - tailX;
+    const vy = s.y - tailY;
+    const t = Math.max(
+      0,
+      Math.min(1, ((p.x - tailX) * vx + (p.y - tailY) * vy) / (vx * vx + vy * vy)),
+    );
+    return falloff(Math.hypot(p.x - (tailX + vx * t), p.y - (tailY + vy * t)));
+  }
+
+  private pointTarget(x: number, y: number): number {
+    const p = this.pointer;
+    return p ? falloff(Math.hypot(p.x - x, p.y - y)) : 0;
   }
 
   private newStreak(anywhere: boolean): Streak {
@@ -163,6 +213,7 @@ export class MeteorFieldEngine {
       length: 60 + r() * 180,
       speed: 0.05 + r() * 0.12,
       alpha: 0.06 + r() * 0.22,
+      glow: 0,
     };
   }
 
@@ -176,6 +227,14 @@ export class MeteorFieldEngine {
       speed: 0.01 + r() * 0.03,
       color: colors[Math.floor(r() * colors.length)],
       phase: r() * Math.PI * 2,
+      glow: 0,
     };
   }
+}
+
+/** Smooth 1 → 0 falloff over GLOW_RADIUS. */
+function falloff(distance: number): number {
+  if (distance >= GLOW_RADIUS) return 0;
+  const k = 1 - distance / GLOW_RADIUS;
+  return k * k * (3 - 2 * k);
 }
