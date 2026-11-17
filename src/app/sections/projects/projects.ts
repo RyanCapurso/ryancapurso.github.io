@@ -1,19 +1,20 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { PortfolioStore } from '../../core/services/portfolio.store';
+import { Reveal } from '../../shared/reveal/reveal';
 import { SectionTitle } from '../../shared/section-title/section-title';
 
 /** Rendered by the page only when PROJECTS (portfolio.data.ts) has items. */
 @Component({
   selector: 'app-projects',
-  imports: [SectionTitle],
+  imports: [SectionTitle, Reveal],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section section--alt" id="projetos" aria-labelledby="projetos-titulo">
       <div class="container wrap">
-        <app-section-title headingId="projetos-titulo">Projetos</app-section-title>
+        <app-section-title appReveal headingId="projetos-titulo">Projetos</app-section-title>
         <ul role="list" class="cards">
           @for (project of store.projects(); track project.title) {
-            <li class="card">
+            <li class="card" appReveal [revealDelay]="($index % 3) * 90">
               <div
                 class="card__image"
                 [style.background-image]="project.image ? 'url(' + project.image + ')' : null"

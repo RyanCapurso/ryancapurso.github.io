@@ -1,9 +1,14 @@
 .hero {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   background: var(--hero-gradient);
   padding-block: clamp(80px, 11vw, 140px);
 }
 
 .inner {
+  position: relative;
+  z-index: 1;
   display: grid;
   justify-items: center;
   gap: 24px;

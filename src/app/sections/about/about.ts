@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { PortfolioStore } from '../../core/services/portfolio.store';
 import { PixelRoom } from '../../features/pixel-room/pixel-room';
 import { RoomObject } from '../../features/pixel-room/pixel-room.model';
+import { Reveal } from '../../shared/reveal/reveal';
 import { SectionTitle } from '../../shared/section-title/section-title';
 
 const REACTIONS: Readonly<Record<RoomObject, string>> = {
@@ -12,7 +13,7 @@ const REACTIONS: Readonly<Record<RoomObject, string>> = {
 
 @Component({
   selector: 'app-about',
-  imports: [SectionTitle, PixelRoom],
+  imports: [SectionTitle, PixelRoom, Reveal],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './about.html',
   styleUrl: './about.scss',

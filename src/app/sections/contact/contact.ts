@@ -2,11 +2,12 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ContactService } from '../../core/services/contact.service';
 import { PortfolioStore } from '../../core/services/portfolio.store';
+import { Reveal } from '../../shared/reveal/reveal';
 import { SectionTitle } from '../../shared/section-title/section-title';
 
 @Component({
   selector: 'app-contact',
-  imports: [ReactiveFormsModule, SectionTitle],
+  imports: [ReactiveFormsModule, SectionTitle, Reveal],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './contact.html',
   styleUrl: './contact.scss',

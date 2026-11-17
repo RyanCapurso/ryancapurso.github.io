@@ -1,9 +1,9 @@
 <section class="section" id="sobre" aria-labelledby="sobre-titulo">
   <div class="container stack">
-    <app-section-title headingId="sobre-titulo">Sobre mim</app-section-title>
+    <app-section-title appReveal headingId="sobre-titulo">Sobre mim</app-section-title>
 
     <div class="grid">
-      <figure class="room">
+      <figure class="room" appReveal>
         <app-pixel-room (action)="onRoomAction($event)" />
         <figcaption class="hint">
           Clique em <b>mim</b>, na <b>cafeteira</b> ou no <b>polvo</b> da cama.
@@ -11,7 +11,7 @@
         <p class="reaction" aria-live="polite">{{ reaction() }}</p>
       </figure>
 
-      <div class="text">
+      <div class="text" appReveal [revealDelay]="150">
         @for (paragraph of profile().about; track $index) {
           <p>{{ paragraph }}</p>
         }

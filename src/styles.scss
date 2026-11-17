@@ -145,6 +145,23 @@ ol[role='list'] {
   }
 }
 
+// Scroll reveal (see shared/reveal). Hidden only when JS runs and motion is allowed.
+@media (prefers-reduced-motion: no-preference) {
+  .js .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 700ms var(--ease),
+      transform 700ms var(--ease);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .js .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

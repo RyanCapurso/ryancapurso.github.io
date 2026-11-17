@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { PortfolioStore } from '../../core/services/portfolio.store';
+import { MeteorField } from '../../features/meteor-field/meteor-field';
 
 @Component({
   selector: 'app-hero',
-  imports: [NgOptimizedImage],
+  imports: [NgOptimizedImage, MeteorField],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './hero.html',
   styleUrl: './hero.scss',

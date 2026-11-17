@@ -1,9 +1,18 @@
 <section class="section section--alt" id="contato" aria-labelledby="contato-titulo">
   <div class="container wrap">
-    <app-section-title headingId="contato-titulo">Contato</app-section-title>
-    <p class="intro">Possui alguma dúvida ou quer trabalhar em conjunto? Me envie uma mensagem!</p>
+    <app-section-title appReveal headingId="contato-titulo">Contato</app-section-title>
+    <p class="intro" appReveal>
+      Possui alguma dúvida ou quer trabalhar em conjunto? Me envie uma mensagem!
+    </p>
 
-    <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <form
+      class="form"
+      appReveal
+      [revealDelay]="100"
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+      novalidate
+    >
       <div class="field">
         <label for="contato-nome">Nome</label>
         <input

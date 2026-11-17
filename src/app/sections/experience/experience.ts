@@ -1,19 +1,20 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { PortfolioStore } from '../../core/services/portfolio.store';
+import { Reveal } from '../../shared/reveal/reveal';
 import { SectionTitle } from '../../shared/section-title/section-title';
 
 @Component({
   selector: 'app-experience',
-  imports: [SectionTitle],
+  imports: [SectionTitle, Reveal],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section" id="experiencia" aria-labelledby="experiencia-titulo">
       <div class="container wrap">
-        <app-section-title headingId="experiencia-titulo">Experiência</app-section-title>
+        <app-section-title appReveal headingId="experiencia-titulo">Experiência</app-section-title>
 
         <ol role="list" class="timeline">
           @for (job of store.experiences(); track job.period + job.client) {
-            <li class="item">
+            <li class="item" appReveal>
               <div class="meta">
                 <p class="period">{{ job.period }}</p>
                 <p class="company">{{ job.company }}</p>

@@ -1,17 +1,18 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { PortfolioStore } from '../../core/services/portfolio.store';
+import { Reveal } from '../../shared/reveal/reveal';
 import { SectionTitle } from '../../shared/section-title/section-title';
 
 @Component({
   selector: 'app-stack',
-  imports: [SectionTitle],
+  imports: [SectionTitle, Reveal],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section section--alt" id="stack" aria-labelledby="stack-titulo">
       <div class="container wrap">
-        <app-section-title headingId="stack-titulo">Stack</app-section-title>
+        <app-section-title appReveal headingId="stack-titulo">Stack</app-section-title>
 
-        <ul role="list" class="tags" aria-label="Tecnologias">
+        <ul role="list" class="tags" aria-label="Tecnologias" appReveal>
           @for (skill of store.skills(); track skill) {
             <li class="tag">{{ skill }}</li>
           }
@@ -19,7 +20,7 @@ import { SectionTitle } from '../../shared/section-title/section-title';
 
         <ul role="list" class="cards">
           @for (item of store.competences(); track item.title) {
-            <li class="card">
+            <li class="card" appReveal [revealDelay]="($index % 3) * 90">
               <h3 class="card__title">{{ item.title }}</h3>
               <span class="card__rule" aria-hidden="true"></span>
               <p class="card__text">{{ item.description }}</p>
