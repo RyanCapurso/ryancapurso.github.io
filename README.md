@@ -15,11 +15,15 @@ npm run format     # Prettier
 
 ## Como editar o conteúdo
 
-Todo o texto do site fica em **`src/app/core/data/portfolio.data.ts`**: perfil, links, tecnologias, competências, experiências e projetos. Os componentes só exibem o que está lá.
+Todo o texto do site fica em **`src/app/core/data/portfolio.data.ts`**, em português (`pt`) e inglês (`en`): perfil, links, tecnologias, competências, experiências e projetos. Os textos da interface (botões, rótulos, mensagens) ficam em `src/app/core/i18n/ui-text.ts`. Ao mudar um texto, atualize as duas línguas.
 
 - **Projetos:** a lista `PROJECTS` está vazia, então a seção e o link "Projetos" do menu não aparecem. Ao adicionar o primeiro item, os dois aparecem sozinhos. Imagens dos projetos vão em `public/images/`.
 - **Currículo:** coloque o PDF em `public/` e descomente a linha do currículo em `SOCIAL_LINKS`.
 - **Foto:** `public/images/ryan.webp` (320×320).
+
+## Idiomas
+
+O site tem duas páginas pré-renderizadas: `/` (português) e `/en` (inglês). O botão PT | EN no topo troca entre elas mantendo a seção atual. Cada página tem título, descrição, imagem de compartilhamento (`og-image.png` / `og-image-en.png`), `<html lang>` e links `hreflang` próprios.
 
 ## Estrutura
 

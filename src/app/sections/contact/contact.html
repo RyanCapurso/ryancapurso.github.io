@@ -1,9 +1,9 @@
 <section class="section section--alt" id="contato" aria-labelledby="contato-titulo">
   <div class="container wrap">
-    <app-section-title appReveal headingId="contato-titulo">Contato</app-section-title>
-    <p class="intro" appReveal>
-      Possui alguma dúvida ou quer trabalhar em conjunto? Me envie uma mensagem!
-    </p>
+    <app-section-title appReveal headingId="contato-titulo">{{
+      ui().contact.title
+    }}</app-section-title>
+    <p class="intro" appReveal>{{ ui().contact.intro }}</p>
 
     <form
       class="form"
@@ -14,7 +14,7 @@
       novalidate
     >
       <div class="field">
-        <label for="contato-nome">Nome</label>
+        <label for="contato-nome">{{ ui().contact.name }}</label>
         <input
           id="contato-nome"
           type="text"
@@ -24,12 +24,12 @@
           [attr.aria-describedby]="showError('name') ? 'contato-nome-erro' : null"
         />
         @if (showError('name')) {
-          <p class="error" id="contato-nome-erro">Informe seu nome (pelo menos 2 letras).</p>
+          <p class="error" id="contato-nome-erro">{{ ui().contact.nameError }}</p>
         }
       </div>
 
       <div class="field">
-        <label for="contato-email">E-mail</label>
+        <label for="contato-email">{{ ui().contact.email }}</label>
         <input
           id="contato-email"
           type="email"
@@ -40,14 +40,12 @@
           [attr.aria-describedby]="showError('email') ? 'contato-email-erro' : null"
         />
         @if (showError('email')) {
-          <p class="error" id="contato-email-erro">
-            Informe um e-mail válido, como nome&#64;empresa.com.
-          </p>
+          <p class="error" id="contato-email-erro">{{ ui().contact.emailError }}</p>
         }
       </div>
 
       <div class="field">
-        <label for="contato-mensagem">Mensagem</label>
+        <label for="contato-mensagem">{{ ui().contact.message }}</label>
         <textarea
           id="contato-mensagem"
           rows="6"
@@ -56,23 +54,21 @@
           [attr.aria-describedby]="showError('message') ? 'contato-mensagem-erro' : null"
         ></textarea>
         @if (showError('message')) {
-          <p class="error" id="contato-mensagem-erro">
-            Escreva uma mensagem com pelo menos 10 caracteres.
-          </p>
+          <p class="error" id="contato-mensagem-erro">{{ ui().contact.messageError }}</p>
         }
       </div>
 
-      <button type="submit" class="btn btn--primary submit">Enviar mensagem</button>
+      <button type="submit" class="btn btn--primary submit">{{ ui().contact.submit }}</button>
 
       <p class="status" aria-live="polite">
         @if (sent()) {
-          Abrimos seu app de e-mail com a mensagem pronta. É só enviar por lá.
+          {{ ui().contact.sent }}
         }
       </p>
     </form>
 
     <p class="direct">
-      Ou escreva direto para <a [href]="'mailto:' + profile().email">{{ profile().email }}</a> ·
+      {{ ui().contact.direct }} <a [href]="'mailto:' + profile().email">{{ profile().email }}</a> ·
       {{ profile().location }}
     </p>
   </div>

@@ -1,12 +1,15 @@
 <section class="section" id="sobre" aria-labelledby="sobre-titulo">
   <div class="container stack">
-    <app-section-title appReveal headingId="sobre-titulo">Sobre mim</app-section-title>
+    <app-section-title appReveal headingId="sobre-titulo">{{ ui().about.title }}</app-section-title>
 
     <div class="grid">
       <figure class="room" appReveal>
         <app-pixel-room (action)="onRoomAction($event)" />
         <figcaption class="hint">
-          Clique em <b>mim</b>, na <b>cafeteira</b> ou no <b>polvo</b> da cama.
+          {{ ui().about.hintBefore }}<b>{{ ui().about.hintMe }}</b
+          >{{ ui().about.hintMiddle }}<b>{{ ui().about.hintCoffee }}</b
+          >{{ ui().about.hintAnd }}<b>{{ ui().about.hintOctopus }}</b
+          >{{ ui().about.hintAfter }}
         </figcaption>
         <p class="reaction" aria-live="polite">{{ reaction() }}</p>
       </figure>
@@ -15,7 +18,18 @@
         @for (paragraph of profile().about; track $index) {
           <p>{{ paragraph }}</p>
         }
-        <p class="education"><span>Formação</span> · {{ profile().education }}</p>
+        <dl class="facts">
+          <div class="fact">
+            <dt>{{ ui().about.education }}</dt>
+            @for (item of profile().education; track item) {
+              <dd>{{ item }}</dd>
+            }
+          </div>
+          <div class="fact">
+            <dt>{{ ui().about.languages }}</dt>
+            <dd>{{ profile().languages }}</dd>
+          </div>
+        </dl>
       </div>
     </div>
   </div>

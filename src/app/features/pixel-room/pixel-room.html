@@ -5,7 +5,7 @@
       [src]="stillImage"
       [width]="manifest.width"
       [height]="manifest.height"
-      alt="Quarto em pixel art: Ryan programando na mesa, uma cafeteira e um polvo de pelúcia na cama."
+      [alt]="ui().room.imageLabel"
     />
   } @else {
     <canvas
@@ -15,14 +15,14 @@
       [attr.width]="manifest.width"
       [attr.height]="manifest.height"
       role="img"
-      aria-label="Quarto em pixel art: Ryan programando na mesa, uma cafeteira e um polvo de pelúcia na cama."
+      [attr.aria-label]="ui().room.imageLabel"
       (pointermove)="onPointerMove($event)"
       (pointerleave)="onPointerLeave()"
       (click)="onCanvasClick($event)"
     ></canvas>
 
     <!-- Keyboard / screen reader access. The mouse uses the canvas' pixel-perfect hit test. -->
-    @for (spot of hotspots; track spot.id) {
+    @for (spot of hotspots(); track spot.id) {
       <button
         type="button"
         class="hotspot"

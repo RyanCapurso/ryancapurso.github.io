@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { LanguageService } from '../../core/i18n/language.service';
 import { PortfolioStore } from '../../core/services/portfolio.store';
 import { Reveal } from '../../shared/reveal/reveal';
 import { SectionTitle } from '../../shared/section-title/section-title';
@@ -10,9 +11,11 @@ import { SectionTitle } from '../../shared/section-title/section-title';
   template: `
     <section class="section section--alt" id="stack" aria-labelledby="stack-titulo">
       <div class="container wrap">
-        <app-section-title appReveal headingId="stack-titulo">Stack</app-section-title>
+        <app-section-title appReveal headingId="stack-titulo">{{
+          ui().stack.title
+        }}</app-section-title>
 
-        <ul role="list" class="tags" aria-label="Tecnologias" appReveal>
+        <ul role="list" class="tags" [attr.aria-label]="ui().stack.techLabel" appReveal>
           @for (skill of store.skills(); track skill) {
             <li class="tag">{{ skill }}</li>
           }
@@ -81,4 +84,5 @@ import { SectionTitle } from '../../shared/section-title/section-title';
 })
 export class Stack {
   protected readonly store = inject(PortfolioStore);
+  protected readonly ui = inject(LanguageService).ui;
 }

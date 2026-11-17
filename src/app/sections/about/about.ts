@@ -1,15 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { LanguageService } from '../../core/i18n/language.service';
 import { PortfolioStore } from '../../core/services/portfolio.store';
 import { PixelRoom } from '../../features/pixel-room/pixel-room';
 import { RoomObject } from '../../features/pixel-room/pixel-room.model';
 import { Reveal } from '../../shared/reveal/reveal';
 import { SectionTitle } from '../../shared/section-title/section-title';
-
-const REACTIONS: Readonly<Record<RoomObject, string>> = {
-  ryan: 'Opa! Me chamou? Estou terminando um deploy.',
-  cafeteira: 'Café passando. Combustível de dev.',
-  polvo: 'O polvo virou! Ele muda de humor.',
-};
 
 @Component({
   selector: 'app-about',
@@ -20,9 +15,10 @@ const REACTIONS: Readonly<Record<RoomObject, string>> = {
 })
 export class About {
   protected readonly profile = inject(PortfolioStore).profile;
+  protected readonly ui = inject(LanguageService).ui;
   protected readonly reaction = signal('');
 
   protected onRoomAction(object: RoomObject): void {
-    this.reaction.set(REACTIONS[object]);
+    this.reaction.set(this.ui().room.reactions[object]);
   }
 }

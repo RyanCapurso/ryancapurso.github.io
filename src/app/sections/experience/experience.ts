@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { LanguageService } from '../../core/i18n/language.service';
 import { PortfolioStore } from '../../core/services/portfolio.store';
 import { Reveal } from '../../shared/reveal/reveal';
 import { SectionTitle } from '../../shared/section-title/section-title';
@@ -10,7 +11,9 @@ import { SectionTitle } from '../../shared/section-title/section-title';
   template: `
     <section class="section" id="experiencia" aria-labelledby="experiencia-titulo">
       <div class="container wrap">
-        <app-section-title appReveal headingId="experiencia-titulo">Experiência</app-section-title>
+        <app-section-title appReveal headingId="experiencia-titulo">{{
+          ui().experience.title
+        }}</app-section-title>
 
         <ol role="list" class="timeline">
           @for (job of store.experiences(); track job.period + job.client) {
@@ -18,13 +21,14 @@ import { SectionTitle } from '../../shared/section-title/section-title';
               <div class="meta">
                 <p class="period">{{ job.period }}</p>
                 <p class="company">{{ job.company }}</p>
-                <p class="client">Cliente: {{ job.client }}</p>
+                <p class="client">{{ ui().experience.client }}: {{ job.client }}</p>
               </div>
               <div class="body">
                 <h3 class="role">{{ job.role }}</h3>
                 <p class="desc">{{ job.description }}</p>
                 <p class="stack">
-                  <span class="visually-hidden">Tecnologias: </span>{{ job.stack.join(' · ') }}
+                  <span class="visually-hidden">{{ ui().experience.techLabel }}: </span
+                  >{{ job.stack.join(' · ') }}
                 </p>
               </div>
             </li>
@@ -101,4 +105,5 @@ import { SectionTitle } from '../../shared/section-title/section-title';
 })
 export class Experience {
   protected readonly store = inject(PortfolioStore);
+  protected readonly ui = inject(LanguageService).ui;
 }

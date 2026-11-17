@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ContactService } from '../../core/services/contact.service';
+import { LanguageService } from '../../core/i18n/language.service';
 import { PortfolioStore } from '../../core/services/portfolio.store';
 import { Reveal } from '../../shared/reveal/reveal';
 import { SectionTitle } from '../../shared/section-title/section-title';
@@ -16,6 +17,7 @@ export class Contact {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly contact = inject(ContactService);
   protected readonly profile = inject(PortfolioStore).profile;
+  protected readonly ui = inject(LanguageService).ui;
 
   protected readonly submitted = signal(false);
   protected readonly sent = signal(false);

@@ -7,19 +7,21 @@
       width="132"
       height="132"
       priority
-      [alt]="'Foto de ' + profile().name"
+      [alt]="ui().hero.photoAlt"
     />
     <p class="kicker">{{ profile().kicker }}</p>
     <h1 class="title" id="hero-title">
-      <span class="light">Olá, eu sou</span> {{ profile().name }}.<br />
+      <span class="light">{{ ui().hero.greeting }}</span> {{ profile().name }}.<br />
       {{ roleParts().before }}<span class="accent">Java</span>{{ roleParts().after }}.
     </h1>
     <p class="summary">{{ profile().summary }}</p>
     <div class="cta">
-      <a class="btn btn--outline" href="#experiencia"
-        >Veja minha experiência <span aria-hidden="true">→</span></a
+      <a class="btn btn--outline" [routerLink]="homePath()" fragment="experiencia"
+        >{{ ui().hero.ctaExperience }} <span aria-hidden="true">→</span></a
       >
-      <a class="btn btn--primary" href="#contato">Fale comigo</a>
+      <a class="btn btn--primary" [routerLink]="homePath()" fragment="contato">{{
+        ui().hero.ctaContact
+      }}</a>
     </div>
   </div>
 </section>

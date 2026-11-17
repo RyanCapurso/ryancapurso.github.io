@@ -21,7 +21,9 @@ export interface Profile {
   readonly email: string;
   readonly photo: string;
   readonly about: readonly string[];
-  readonly education: string;
+  /** Most recent first. */
+  readonly education: readonly string[];
+  readonly languages: string;
 }
 
 export interface Competence {
@@ -45,4 +47,13 @@ export interface Project {
   readonly image?: string;
   readonly url?: string;
   readonly repoUrl?: string;
+}
+
+export interface PortfolioContent {
+  readonly profile: Profile;
+  readonly socialLinks: readonly SocialLink[];
+  readonly competences: readonly Competence[];
+  readonly experiences: readonly Experience[];
+  readonly projects: readonly Project[];
+  readonly navItems: readonly NavItem[];
 }

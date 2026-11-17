@@ -4,13 +4,15 @@ import {
   DestroyRef,
   ElementRef,
   afterNextRender,
+  computed,
   inject,
   output,
   signal,
   viewChild,
 } from '@angular/core';
 import { ROOM_MANIFEST } from './pixel-room.manifest';
-import { HOTSPOTS, OBJECT_LABELS, RoomObject } from './pixel-room.model';
+import { LanguageService } from '../../core/i18n/language.service';
+import { HOTSPOTS, RoomObject } from './pixel-room.model';
 import { PixelRoomEngine } from './pixel-room-engine';
 
 interface Hotspot {
@@ -48,18 +50,19 @@ export class PixelRoom {
   protected readonly hovering = signal(false);
   protected readonly failed = signal(false);
   protected readonly stillImage = 'quarto/quarto-estatico.png';
-  protected readonly hotspots: readonly Hotspot[] = (Object.keys(HOTSPOTS) as RoomObject[]).map(
-    (id) => {
+  protected readonly ui = inject(LanguageService).ui;
+  protected readonly hotspots = computed<readonly Hotspot[]>(() =>
+    (Object.keys(HOTSPOTS) as RoomObject[]).map((id) => {
       const [x, y, w, h] = HOTSPOTS[id];
       return {
         id,
-        label: OBJECT_LABELS[id],
+        label: this.ui().room.labels[id],
         left: (x / ROOM_MANIFEST.width) * 100,
         top: (y / ROOM_MANIFEST.height) * 100,
         width: (w / ROOM_MANIFEST.width) * 100,
         height: (h / ROOM_MANIFEST.height) * 100,
       };
-    },
+    }),
   );
 
   private engine?: PixelRoomEngine;

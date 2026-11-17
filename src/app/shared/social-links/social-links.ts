@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { LanguageService } from '../../core/i18n/language.service';
 import { SocialLink } from '../../core/models/portfolio.model';
 
 /** Square outlined icon links (LinkedIn, résumé). */
@@ -14,7 +15,7 @@ import { SocialLink } from '../../core/models/portfolio.model';
             [href]="link.href"
             target="_blank"
             rel="noopener noreferrer"
-            [attr.aria-label]="link.label + ' (abre em nova aba)'"
+            [attr.aria-label]="link.label + ' (' + ui().newTab + ')'"
           >
             @switch (link.icon) {
               @case ('linkedin') {
@@ -66,4 +67,5 @@ import { SocialLink } from '../../core/models/portfolio.model';
 export class SocialLinks {
   readonly links = input.required<readonly SocialLink[]>();
   readonly size = input(36);
+  protected readonly ui = inject(LanguageService).ui;
 }

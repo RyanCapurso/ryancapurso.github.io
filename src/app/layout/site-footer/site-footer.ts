@@ -1,14 +1,21 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { LanguageService } from '../../core/i18n/language.service';
 import { PortfolioStore } from '../../core/services/portfolio.store';
 import { SocialLinks } from '../../shared/social-links/social-links';
 
 @Component({
   selector: 'app-site-footer',
-  imports: [SocialLinks],
+  imports: [RouterLink, SocialLinks],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <footer class="footer">
-      <a class="to-top" href="#inicio" aria-label="Voltar ao topo">
+      <a
+        class="to-top"
+        [routerLink]="language.homePath()"
+        fragment="inicio"
+        [attr.aria-label]="language.ui().footer.backToTop"
+      >
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <path
             d="M6 13.5 12 7.5l6 6M6 18.5l6-6 6 6"
@@ -71,5 +78,6 @@ import { SocialLinks } from '../../shared/social-links/social-links';
 })
 export class SiteFooter {
   protected readonly store = inject(PortfolioStore);
+  protected readonly language = inject(LanguageService);
   protected readonly year = new Date().getFullYear();
 }

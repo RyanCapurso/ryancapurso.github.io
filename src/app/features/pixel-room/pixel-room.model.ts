@@ -26,9 +26,3 @@ export const HOTSPOTS: Readonly<Record<RoomObject, readonly [number, number, num
   cafeteira: [62, 78, 22, 35],
   polvo: [157, 88, 76, 68],
 };
-
-export const OBJECT_LABELS: Readonly<Record<RoomObject, string>> = {
-  ryan: 'Ryan programando. Ativar para chamar a atenção dele.',
-  cafeteira: 'Cafeteira. Ativar para passar um café.',
-  polvo: 'Polvo de pelúcia na cama. Ativar para virar o polvo.',
-};
